@@ -51,10 +51,12 @@ ZED camera captures stereo pairs of left (Il) and right (Ir) images -> run throu
 1) Figure out 8-point algorithm or use given ZED intrisinc, extrinsic parameters to derive Fundamental matrix F.
 2) Use F, ZED camera instrinsic matrices $K_R$ and $K_L$ to derive essential matrix $E={K_R^T}\cdot{F}\cdot{K_L}$
 3) __FIGURE OUT THE MATH FOR THIS:__ Rectify the stereo images with epipolar geometry and epilines so that corresponding points between the two images lie on the same horizontal line (epipolar line).
-4) Derive depth of objects (most likely the corners of each 2D bounding box) in the rectified stereo images. Use the formula $Z=\dfrac{{f}\cdot{B}}{d}$, where $Z$ is distance of the object from the camera, $f$ is focal length, $B$ is baseline, and $d$ is disparity (horizontal shift between left and right image). Given a point $P$ that corresponds in the left and right images, disparity $d=x_l-x_r$, where $x_l$ is the horizontal pixel distance of $P$ in the left image, and $x_r$ is the horizontal pixel distance of $P$ in the right image.
+
+   _The rectification problem setup: we compute two homographies_ $H_1$ _and_ $H_2$ _that we can apply to the image planes to make the resulting planes parallel. This would make the epipole_ $e$ _at infinity._
+5) Derive depth of objects (most likely the corners of each 2D bounding box) in the rectified stereo images. Use the formula $Z=\dfrac{{f}\cdot{B}}{d}$, where $Z$ is distance of the object from the camera, $f$ is focal length, $B=120mm$ (for ZED) is baseline, and $d$ is disparity (horizontal shift between left and right image). Given a point $P$ that corresponds in the left and right images, disparity $d=x_l-x_r$, where $x_l$ is the horizontal pixel distance of $P$ in the left image, and $x_r$ is the horizontal pixel distance of $P$ in the right image.
 
    _Only need to calculate horizontal disparity between stereo images have been rectified, so we ignore vertical disparity._
-6) Estimate 3D coordinates with depth and ZED camera calibration information. The 3D position $(X,Y,Z)$ of the front face of the object is calculated by: $X={x-c_x}\cdot{\dfrac{Z}{f_x}}$, $Y={y-c_y}\cdot{\dfrac{Z}{f_y}}$, and $Z=depth(x,y)$ where $(x,y)$ is the pixel coordinates of the corners of the 2D bounding box, focal lengths of the left ZED camera $f_x=700.819$ and $f_y=700.819$, and principle point or optical center coordinates of the left ZED camera $c_x=665.465$ and $c_y=371.953$. The back face of the object is estimated with the object's depth and width.
+6) Estimate 3D coordinates with depth and ZED camera calibration information. The 3D position $(X,Y,Z)$ (a point on the epipolar plane $\pi$ which contains the baseline $B$) of the front face of the object is calculated by: $X={x-c_x}\cdot{\dfrac{Z}{f_x}}$, $Y={y-c_y}\cdot{\dfrac{Z}{f_y}}$, and $Z=depth(x,y)$ where $(x,y)$ is the pixel coordinates of the corners of the 2D bounding box, focal lengths of the left ZED camera $f_x=700.819$ and $f_y=700.819$, and principle point or optical center coordinates of the left ZED camera $c_x=665.465$ and $c_y=371.953$. The back face of the object is estimated with the object's depth and width.
 
 ## Eventual ROS2 Package Implementation:
 ...
@@ -63,6 +65,8 @@ ZED camera captures stereo pairs of left (Il) and right (Ir) images -> run throu
 [ZED Calibration File](https://support.stereolabs.com/hc/en-us/articles/360007497173-What-is-the-calibration-file)
 
 [CS231A Course Notes 3: Epipolar Geometry](https://web.stanford.edu/class/cs231a/course_notes/03-epipolar-geometry.pdf)
+
+[Epipolar Geometry and the Fundamental Matrix](https://www.robots.ox.ac.uk/~vgg/hzbook/hzbook2/HZepipolar.pdf)
 
 [Complex YOLO: YOLOv4 for 3D Object Detection](https://medium.com/@mohit_gaikwad/complex-yolo-yolov4-for-3d-object-detection-3c9746281cd2)
 
