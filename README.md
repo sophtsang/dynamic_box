@@ -48,9 +48,9 @@ ZED camera captures stereo pairs of left (Il) and right (Ir) images -> run throu
 1) Implemented YOLOv3 and YOLOv11 2D bounding box generators for objects in stereo images. Returns bounding box information in the form of $(x_l,y_l,w,h)$.
 
 ### Currently working on:
-1) Figure out 8-point algorithm or use given ZED intrisinc, extrinsic parameters to derive Fundamental matrix F.
-2) Use F, ZED camera instrinsic matrices $K_R$ and $K_L$ to derive essential matrix $E={K_R^T}\cdot{F}\cdot{K_L}$
-3) __FIGURE OUT THE MATH FOR THIS:__ Rectify the stereo images with epipolar geometry and epilines so that corresponding points between the two images lie on the same horizontal line (epipolar line).
+1) Figure out 8-point algorithm or use given ZED intrisinc, extrinsic parameters to derive Fundamental matrix $F=K^{'}[T_x]RK^{-1}$.
+2) Use F, ZED camera instrinsic matrices $K_R$ and $K_L$ to derive essential matrix $E={K_R^T}\cdot{F}\cdot{K_L}={[T_x]}\cdot{R}$, which is used to compute epipolar lines $l={E}\cdot{P}$ and $l^{'}={E^T}\cdot{P^{'}}$ with $P$ being a point on the left image and $P^{'}$ on the right image. The location of right $P^{'}$ in the left image is derived by rotating $P^{'}$ with rotation matrix $R$ and translating with translation matrix $T$ to get $P={R}\cdot{P^{'}}+T$.
+4) __FIGURE OUT THE MATH FOR THIS:__ Rectify the stereo images with epipolar geometry and epipolar lines $l$ so that corresponding points between the two images lie on the same horizontal line (epipolar line).
 
    _The rectification problem setup: we compute two homographies_ $H_1$ _and_ $H_2$ _that we can apply to the image planes to make the resulting planes parallel. This would make the epipole_ $e$ _at infinity._
 5) Derive depth of objects (most likely the corners of each 2D bounding box) in the rectified stereo images. Use the formula $Z=\dfrac{{f}\cdot{B}}{d}$, where $Z$ is distance of the object from the camera, $f$ is focal length, $B=120mm$ (for ZED) is baseline, and $d$ is disparity (horizontal shift between left and right image). Given a point $P$ that corresponds in the left and right images, disparity $d=x_l-x_r$, where $x_l$ is the horizontal pixel distance of $P$ in the left image, and $x_r$ is the horizontal pixel distance of $P$ in the right image.
