@@ -1,3 +1,6 @@
+## Update Notes:
+Still cannot push my commits :(.
+
 ## Installation:
 ### Conda: 
 https://docs.anaconda.com/anaconda/install/linux/:
