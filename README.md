@@ -46,8 +46,9 @@ ZED camera captures stereo pairs of left (Il) and right (Ir) images -> run throu
 
 ### Steps completed:
 1) Implemented YOLOv3 and YOLOv11 2D bounding box generators for objects in stereo images. Returns bounding box information in the form of $(x_l,y_l,w,h)$.
-2) Used SIFT to 8 corresponding keypoints on the left and right stereo images, then used these 8 keypoints (left $P_i=(x_i,y_i,1)$, right $P_i^{'}=(x_i^{'},y_i^{'},1)$ to derive the fundamental matrix $F$, by finding coefficients $f_{11}$, $f_{12}$, $f_{13}$, $f_{21}$, $f_{22}$, $f_{23}$, $f_{31}$, $f_{32}$, $f_{33}$ that satisfy the epipolar constraint ${P_i^T}Fp_i^{'}=0$.
-   
+2) Used SIFT to 8 corresponding keypoints on the left and right stereo images, then used these 8 keypoints (left $P_i=(x_i,y_i,1)$, right $P_i^{'}=(x_i^{'},y_i^{'},1)$ to derive the fundamental matrix $F$, by finding coefficients $f_{11}$, $f_{12}$, $f_{13}$, $f_{21}$, $f_{22}$, $f_{23}$, $f_{31}$, $f_{32}$, $f_{33}$ that satisfy the epipolar constraint ${P_i^T}FP_i^{'}=0$.
+
+   _Notes: need to confirm whether I assume left $P_i=(x_i,y_i,1)$, right $P_i^{'}=(x_i^{'},y_i^{'},1)$ or left $P_i^{'}=(x_i^{'},y_i^{'},1)$, right $P_i=(x_i,y_i,1)$. Getting two differen $F$ for different assumptions._
    _Eventually when I start working with the ZED, I'll also derive the Fundamental matrix_ $F=K^{'}[T_x]RK^{-1}$ _using the intrisinc and extrinsic parameters given by the calibration file to test accuracy of_ $F$. 
 
 ### Currently working on:
