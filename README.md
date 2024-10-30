@@ -1,5 +1,5 @@
 ## Update Notes:
-Still cannot push my commits :(.
+DEPRECIATED.
 
 ## Installation:
 ### Conda: 
